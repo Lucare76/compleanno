@@ -182,6 +182,17 @@
             15% { opacity: 1; }
             100% { transform: translateY(160px) rotate(240deg); opacity: 0; }
         }
+        .party-confetti {
+            position: fixed; z-index: 5600; pointer-events: none;
+            width: 8px; height: 14px; border-radius: 2px;
+            background: linear-gradient(180deg, #ff60a8, #ffca28);
+            animation: confettiBurst 1.6s ease-out forwards;
+        }
+        @keyframes confettiBurst {
+            0% { transform: translate(-50%, -50%) scale(0.6) rotate(0deg); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translate(-50%, 120px) scale(1) rotate(220deg); opacity: 0; }
+        }
         .burst-item {
             position: fixed; z-index: 6000; pointer-events: none;
             animation: burst 1.6s ease-out forwards;
@@ -328,6 +339,7 @@
 
         function sendRSVP() {
             burstHearts();
+            partyConfetti();
             const msg = "Ciao! Confermo la mia presenza alla festa di Aurora (2 anni) e Ilenia (14 anni) il 03/03/2026 dalle 18:00. A presto!";
             const url1 = `https://wa.me/393334372831?text=${encodeURIComponent(msg)}`;
             const url2 = `https://wa.me/393464147459?text=${encodeURIComponent(msg)}`;
@@ -363,6 +375,21 @@
                 el.style.transform = `rotate(${Math.random() * 180}deg)`;
                 document.body.appendChild(el);
                 setTimeout(() => el.remove(), 1900);
+            }
+        }
+        function partyConfetti() {
+            const count = 32;
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2 + 40;
+            for (let i = 0; i < count; i++) {
+                const el = document.createElement('div');
+                el.className = 'party-confetti';
+                el.style.left = (centerX + (Math.random() * 240 - 120)) + 'px';
+                el.style.top = (centerY + (Math.random() * 60 - 30)) + 'px';
+                el.style.transform = `rotate(${Math.random() * 180}deg)`;
+                el.style.animationDelay = (Math.random() * 0.2) + 's';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 1700);
             }
         }
     </script>
