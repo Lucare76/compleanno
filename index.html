@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aurora & Ilenia | 2 e 14 Anni di Amore ✨</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;700&family=Dancing+Script:wght@700&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --pink: #ff60a8;
+            --gold: #ffca28;
+            --soft: #fff5f8;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { 
+            margin: 0; font-family: 'Quicksand', sans-serif; background: var(--soft); 
+            overflow-x: hidden; color: #444; touch-action: manipulation;
+        }
+
+        /* SFONDO DINAMICO */
+        .bg-glow {
+            position: fixed; inset: 0;
+            background: radial-gradient(circle at 50% 50%, #fff 0%, #ffebee 100%);
+            z-index: -1;
+        }
+
+        /* REGALO INITIAL */
+        #gate {
+            position: fixed; inset: 0; background: var(--pink);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            z-index: 10000; transition: 1.2s cubic-bezier(0.8, 0, 0.2, 1);
+        }
+        .gift-box { font-size: 110px; cursor: pointer; animation: pulse 1s infinite alternate; filter: drop-shadow(0 0 20px white); }
+        @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.15); } }
+
+        /* MAIN CONTENT */
+        .main { opacity: 0; display: flex; flex-direction: column; align-items: center; padding: 20px; transition: 1.5s; visibility: hidden; }
+        .main.active { opacity: 1; visibility: visible; }
+
+        .titolo-emozionale {
+            font-family: 'Dancing Script', cursive; text-align: center;
+            font-size: clamp(1.7rem, 3.8vw, 2.4rem); color: var(--pink); margin: 20px 0;
+            line-height: 1.2;
+        }
+
+        /* STACK DI POLAROID */
+        .photo-stack {
+            position: relative; width: clamp(220px, 70vw, 300px); height: clamp(280px, 90vw, 380px); margin: 20px 0 40px;
+            cursor: pointer; z-index: 100;
+        }
+        .polaroid {
+            position: absolute; width: 100%; height: 100%; background: white;
+            padding: 12px 12px 55px 12px; box-shadow: 0 15px 35px rgba(255, 96, 168, 0.2);
+            border-radius: 4px; transition: 0.7s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+            pointer-events: auto;
+        }
+        .polaroid img { width: 100%; height: 100%; object-fit: cover; border-radius: 2px; }
+        .polaroid-caption { font-family: 'Dancing Script', cursive; font-size: 1.4rem; color: #555; margin-top: 12px; text-align: center; }
+
+        /* CARD INFO */
+        .card-info {
+            background: white; width: 100%; max-width: 380px; border-radius: 40px;
+            padding: clamp(28px, 6vw, 40px) clamp(18px, 5vw, 25px) clamp(22px, 5vw, 30px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+            text-align: center; position: relative; margin-top: 20px;
+        }
+        .age-badge {
+            position: absolute; top: -45px; left: 50%; transform: translateX(-50%);
+            background: var(--gold); color: white; width: clamp(90px, 22vw, 110px); height: clamp(90px, 22vw, 110px);
+            border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-family: 'Fredoka'; font-size: clamp(1.7rem, 5vw, 2.2rem); line-height: 1;
+            border: 6px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .age-badge span:last-child { font-size: clamp(1.4rem, 4.3vw, 1.8rem); margin-top: 4px; }
+
+        .info-row { 
+            background: #fffafa; border-radius: 20px; padding: 15px; margin: 12px 0;
+            display: flex; align-items: center; gap: 12px; font-weight: 700;
+            border: 1px dashed var(--pink); text-align: left;
+        }
+
+        /* RSVP */
+        .rsvp-box { background: var(--pink); border-radius: 30px; padding: clamp(18px, 5vw, 25px); margin-top: 25px; color: white; }
+        .btn-confirm { 
+            background: var(--gold); color: #ad1457; border: none; width: 100%; padding: clamp(14px, 4.5vw, 18px); 
+            border-radius: 50px; font-weight: 800; font-size: clamp(1rem, 4vw, 1.2rem); cursor: pointer;
+            box-shadow: 0 6px 0 #e6b800; margin-top: 10px;
+        }
+
+        /* PARTICELLE */
+        .magical-item {
+            position: fixed; bottom: -100px; z-index: 5000; pointer-events: none;
+            animation: fly 5s linear forwards;
+        }
+        @keyframes fly {
+            0% { transform: translateY(0) rotate(0deg) scale(0.5); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translateY(-120vh) rotate(360deg) scale(1.5); opacity: 0; }
+        }
+
+        /* MOBILE OPTIMIZATION */
+        @media (max-width: 360px) {
+            .main { padding: 16px; }
+            .info-row { font-size: 0.95rem; padding: 12px; }
+            .polaroid-caption { font-size: 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <audio id="canzone" loop prefetch="auto">
+        <source src="qualcosa-in-piu.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="gate" onclick="unlock()">
+        <div class="gift-box">🎁</div>
+        <h2 style="color:white; font-family:'Fredoka';">Apri il regalo di Aurora e Ilenia!</h2>
+    </div>
+
+    <div class="main" id="main">
+        <div class="titolo-emozionale">Due cuori, due compleanni...</div>
+
+        <div class="photo-stack" id="stack">
+            <div class="polaroid" style="z-index: 7; transform: rotate(-3deg);"><img src="URL_FOTO_A1"><div class="polaroid-caption">Aurora, 2 anni di meraviglia 🌸</div></div>
+            <div class="polaroid" style="z-index: 6; transform: rotate(4deg);"><img src="URL_FOTO_A2"><div class="polaroid-caption">Piccoli passi, grandi sogni 👣</div></div>
+            <div class="polaroid" style="z-index: 5; transform: rotate(-5deg);"><img src="URL_FOTO_A3"><div class="polaroid-caption">Sorrisi che illuminano ✨</div></div>
+            <div class="polaroid" style="z-index: 4; transform: rotate(3deg);"><img src="URL_FOTO_I1"><div class="polaroid-caption">Ilenia, 14 anni di luce 💫</div></div>
+            <div class="polaroid" style="z-index: 3; transform: rotate(-4deg);"><img src="URL_FOTO_I2"><div class="polaroid-caption">Energia, musica e risate 🎵</div></div>
+            <div class="polaroid" style="z-index: 2; transform: rotate(2deg);"><img src="URL_FOTO_I3"><div class="polaroid-caption">Un sorriso che dice tutto 😊</div></div>
+            <div class="polaroid" style="z-index: 1; transform: rotate(-2deg);"><img src="URL_FOTO_AI"><div class="polaroid-caption">Insieme è magia 🦋</div></div>
+        </div>
+
+        <div class="titolo-emozionale" style="font-size: 2.5rem; margin-top: -20px;">...e una festa piena d'amore.</div>
+
+        <div class="card-info">
+            <div class="age-badge"><span>2</span><span>+14</span></div>
+            <h1 style="color:var(--pink); font-size: 2.4rem; margin: 10px 0;">Aurora &amp; Ilenia</h1>
+            <p style="font-weight: 700; color: #ad1457;">FESTEGGIA CON NOI!</p>
+            
+            <div class="info-row">📅 Martedì 3 Marzo 2026</div>
+            <div class="info-row" style="background:#e3f2fd; border-color:#2196f3;">🕒 Dalle 18:00</div>
+            <div class="info-row" style="background:#f3e5f5; border-color:#9c27b0;">📍 Casa nostra</div>
+            <div class="info-row" style="background:#fff3e0; border-color:#fb8c00;">🥂 Apericena</div>
+
+            <div class="rsvp-box">
+                <p style="margin:0 0 10px; font-weight:700;">Clicca per confermare la tua presenza</p>
+                <button class="btn-confirm" onclick="sendRSVP()">ACCETTO L'INVITO 🦋</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GESTIONE POLAROID (TOUCH E CLICK)
+        const stack = document.getElementById('stack');
+        stack.addEventListener('touchstart', (e) => { e.preventDefault(); popPhoto(); });
+        stack.addEventListener('click', popPhoto);
+
+        function popPhoto() {
+            const cards = [...document.querySelectorAll('.polaroid')].filter(c => c.style.opacity !== '0');
+            const topCard = cards.sort((a, b) => b.style.zIndex - a.style.zIndex)[0];
+            
+            if (topCard) {
+                topCard.style.transform = "translate(150%, -200px) rotate(45deg)";
+                topCard.style.opacity = "0";
+                topCard.style.pointerEvents = "none";
+
+                if (cards.length === 1) {
+                    setTimeout(() => {
+                        document.querySelectorAll('.polaroid').forEach((c, i) => {
+                            c.style.opacity = "1";
+                            c.style.pointerEvents = "auto";
+                            c.style.transform = `rotate(${[ -3, 4, -5, 3, -4, 2, -2 ][i]}deg)`;
+                        });
+                    }, 800);
+                }
+            }
+        }
+
+        function unlock() {
+            document.getElementById('gate').style.transform = 'translateY(-100%)';
+            document.getElementById('main').classList.add('active');
+            document.getElementById('canzone').play();
+            startRain();
+        }
+
+        function startRain() {
+            const items = ['🦋', '🍩', '🍭', '🍬', '🌸', '🦋'];
+            setInterval(() => {
+                const el = document.createElement('div');
+                el.className = 'magical-item';
+                el.innerHTML = items[Math.floor(Math.random()*items.length)];
+                el.style.left = Math.random() * 95 + "vw";
+                el.style.fontSize = (Math.random() * 20 + 25) + "px";
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 5000);
+            }, 350);
+        }
+
+        function sendRSVP() {
+            const msg = "Ciao! Confermo la mia presenza alla festa di Aurora (2 anni) e Ilenia (14 anni) il 03/03/2026 dalle 18:00. A presto!";
+            const url1 = `https://wa.me/393334372831?text=${encodeURIComponent(msg)}`;
+            const url2 = `https://wa.me/393464147459?text=${encodeURIComponent(msg)}`;
+            window.open(url1, '_blank');
+            setTimeout(() => window.open(url2, '_blank'), 300);
+        }
+    </script>
+</body>
+</html>
