@@ -51,6 +51,14 @@
             position: relative; width: clamp(220px, 70vw, 300px); height: clamp(280px, 90vw, 380px); margin: 20px 0 40px;
             cursor: pointer; z-index: 100;
         }
+        .tap-hint {
+            position: absolute; left: 50%; top: -26px; transform: translateX(-50%);
+            background: rgba(255, 96, 168, 0.9); color: white; padding: 6px 12px;
+            border-radius: 999px; font-size: 0.85rem; font-weight: 700;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12); letter-spacing: 0.2px;
+            transition: 0.4s; pointer-events: none;
+        }
+        .tap-hint.hide { opacity: 0; transform: translateX(-50%) translateY(-8px); }
         .polaroid {
             position: absolute; width: 100%; height: 100%; background: white;
             padding: 12px 12px 55px 12px; box-shadow: 0 15px 35px rgba(255, 96, 168, 0.2);
@@ -66,6 +74,9 @@
             padding: clamp(28px, 6vw, 40px) clamp(18px, 5vw, 25px) clamp(22px, 5vw, 30px);
             box-shadow: 0 20px 50px rgba(0,0,0,0.05);
             text-align: center; position: relative; margin-top: 20px;
+        }
+        .countdown {
+            margin: 12px 0 6px; font-weight: 800; color: #d81b60; font-size: 1.05rem;
         }
         .age-badge {
             position: absolute; top: -45px; left: 50%; transform: translateX(-50%);
@@ -100,6 +111,15 @@
             20% { opacity: 1; }
             100% { transform: translateY(-120vh) rotate(360deg) scale(1.5); opacity: 0; }
         }
+        .burst-item {
+            position: fixed; z-index: 6000; pointer-events: none;
+            animation: burst 1.6s ease-out forwards;
+        }
+        @keyframes burst {
+            0% { transform: translate(-50%, -50%) scale(0.4); opacity: 0; }
+            20% { opacity: 1; }
+            100% { transform: translate(-50%, -140px) scale(1.2); opacity: 0; }
+        }
 
         /* MOBILE OPTIMIZATION */
         @media (max-width: 360px) {
@@ -126,6 +146,7 @@
         <div class="titolo-emozionale">Due cuori, due compleanni...</div>
 
         <div class="photo-stack" id="stack">
+            <div class="tap-hint" id="tapHint">Tocca per sfogliare ✨</div>
             <div class="polaroid" style="z-index: 7; transform: rotate(-3deg);"><img src="URL_FOTO_A1"><div class="polaroid-caption">Aurora, 2 anni di meraviglia 🌸</div></div>
             <div class="polaroid" style="z-index: 6; transform: rotate(4deg);"><img src="URL_FOTO_A2"><div class="polaroid-caption">Piccoli passi, grandi sogni 👣</div></div>
             <div class="polaroid" style="z-index: 5; transform: rotate(-5deg);"><img src="URL_FOTO_A3"><div class="polaroid-caption">Sorrisi che illuminano ✨</div></div>
@@ -141,6 +162,7 @@
             <div class="age-badge"><span>2</span><span>+14</span></div>
             <h1 style="color:var(--pink); font-size: 2.4rem; margin: 10px 0;">Aurora &amp; Ilenia</h1>
             <p style="font-weight: 700; color: #ad1457;">FESTEGGIA CON NOI!</p>
+            <div class="countdown" id="countdown">Mancano … giorni</div>
             
             <div class="info-row">📅 Martedì 3 Marzo 2026</div>
             <div class="info-row" style="background:#e3f2fd; border-color:#2196f3;">🕒 Dalle 18:00</div>
@@ -159,8 +181,15 @@
         const stack = document.getElementById('stack');
         stack.addEventListener('touchstart', (e) => { e.preventDefault(); popPhoto(); });
         stack.addEventListener('click', popPhoto);
+        const tapHint = document.getElementById('tapHint');
+        let hintHidden = false;
 
         function popPhoto() {
+            if (!hintHidden && tapHint) {
+                tapHint.classList.add('hide');
+                hintHidden = true;
+                setTimeout(() => tapHint.remove(), 500);
+            }
             const cards = [...document.querySelectorAll('.polaroid')].filter(c => c.style.opacity !== '0');
             const topCard = cards.sort((a, b) => b.style.zIndex - a.style.zIndex)[0];
             
@@ -188,6 +217,17 @@
             startRain();
         }
 
+        function updateCountdown() {
+            const target = new Date('2026-03-03T18:00:00');
+            const now = new Date();
+            const diff = Math.max(0, target - now);
+            const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+            const el = document.getElementById('countdown');
+            if (el) el.textContent = `Mancano ${days} giorni`;
+        }
+        updateCountdown();
+        setInterval(updateCountdown, 1000 * 60 * 60);
+
         function startRain() {
             const items = ['🦋', '🍩', '🍭', '🍬', '🌸', '🦋'];
             setInterval(() => {
@@ -202,11 +242,28 @@
         }
 
         function sendRSVP() {
+            burstHearts();
             const msg = "Ciao! Confermo la mia presenza alla festa di Aurora (2 anni) e Ilenia (14 anni) il 03/03/2026 dalle 18:00. A presto!";
             const url1 = `https://wa.me/393334372831?text=${encodeURIComponent(msg)}`;
             const url2 = `https://wa.me/393464147459?text=${encodeURIComponent(msg)}`;
             window.open(url1, '_blank');
             setTimeout(() => window.open(url2, '_blank'), 300);
+        }
+
+        function burstHearts() {
+            const items = ['💖', '💫', '✨', '🌸', '🦋'];
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            for (let i = 0; i < 14; i++) {
+                const el = document.createElement('div');
+                el.className = 'burst-item';
+                el.innerHTML = items[Math.floor(Math.random() * items.length)];
+                el.style.left = (centerX + (Math.random() * 120 - 60)) + 'px';
+                el.style.top = (centerY + (Math.random() * 80 - 40)) + 'px';
+                el.style.fontSize = (Math.random() * 18 + 18) + 'px';
+                document.body.appendChild(el);
+                setTimeout(() => el.remove(), 1700);
+            }
         }
     </script>
 </body>
