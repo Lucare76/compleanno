@@ -266,6 +266,7 @@
         stack.addEventListener('click', popPhoto);
         const tapHint = document.getElementById('tapHint');
         let hintHidden = false;
+        let isUnlocked = false;
 
         function popPhoto() {
             if (!hintHidden && tapHint) {
@@ -294,6 +295,9 @@
         }
 
         function unlock() {
+            if (isUnlocked) return;
+            isUnlocked = true;
+
             document.getElementById('gate').style.transform = 'translateY(-100%)';
             document.getElementById('main').classList.add('active');
             document.getElementById('canzone').play();
@@ -341,13 +345,12 @@
         }
 
         function sendRSVP() {
+            const msg = "Ciao! Confermo la mia presenza alla festa di Aurora (2 anni) e Ilenia (14 anni) il 03/03/2026 dalle 18:00. A presto!";
+            const url = `https://wa.me/393334372831?text=${encodeURIComponent(msg)}`;
+            const popup = window.open(url, '_blank', 'noopener');
+            if (!popup) window.location.href = url;
             burstHearts();
             partyConfetti();
-            const msg = "Ciao! Confermo la mia presenza alla festa di Aurora (2 anni) e Ilenia (14 anni) il 03/03/2026 dalle 18:00. A presto!";
-            const url1 = `https://wa.me/393334372831?text=${encodeURIComponent(msg)}`;
-            const url2 = `https://wa.me/393464147459?text=${encodeURIComponent(msg)}`;
-            setTimeout(() => window.open(url1, '_blank'), 1800);
-            setTimeout(() => window.open(url2, '_blank'), 2400);
         }
 
         function burstHearts() {
